@@ -1,0 +1,47 @@
+Hello, Rubber Duck.
+
+I am having a problem with my app and getting it to queue the links from multiple pages and then click on all of those links. Right now, I have an app that will queue up the links on one page and then click on all of them to be opened in multiple tabs. It can do up to a limit of 10 tabs because that is the max number of links on a single page. I need it to be able to click 'next' on the page and queue up more links to be clicked based on the 'tabslimit' I have set. 
+
+The tabslimit function works for the one page that my app works on. It can limit the number of tabs between 0 and 10. It can hold a value higher than 10 but it still is only able to open 10 links because the contentScript.js 'openLinkedInLinks' action can only query one page for the Array of URLs it passes back to backgroundScript.js. It is incapable of scraping links from multiple pages. I don't think it can without them being opened first on backgroundpageScript.js because the contentScript can't do any actions directly to the page like clicking on the 'next' button.
+
+The extra pages need to be opened before contentScript.js starts queuing.
+
+So there are two problems.
+
+1. contentScript.js needs to be able to do jquery_set_links over multiple pages
+
+AND
+
+2. backgroundpageScript.js needs to open multiple tabs based on the value of tabslimit. Every time it increments multiples of 10, the 'next' button needs to be clicked. 
+
+
+so basically if tabslimit/10 = x
+            open x additional tabs (by clicking 'next' on the progression of pages) and THEN start queuing links from ALL those pages with the 'openLinkedInLinks' action in openAllUrls
+
+Do I need to make something like the arguments in openUrl(urls, index, count, tabid) to do this properly?
+
+I started making function openSearchPages(tab) to open all the pages for queuing from the start... but how do I build it correctly?
+
+Do I need a new case action in backgroundpageScript to deal with openSearchPages? How the hell do I get that to work? I can use the window.location = $('.next a[rel~="next"]').attr("href"); from 'openNextPage' but that only works once and it replaces the current window so we will lose the opportunity to scrape from multiple tabs?
+
+Or is opening the search tabs first the wrong way altogether? I think the original programmer was possibly attempting to do this in a different way that only pulled up the next page once the first set were opened. I think he was doing it through the openUrl function on backgroundpageScript. I dicked around with that for like 2 days and couldn't get it to work that way. I don't think it's possible because of the way everything is queued. 
+
+Well I could see how it could be possible if you could run the openAllUrls function again after 10 links are opened but I couldn't get the damn function to run again within the openUrl function. Which didn't make any fucking sense to me, frankly. I mean I could get it to open the damn next page, but it wouldn't run openAllUrls again for some fucking reason. Maybe I should go back at it that way. Fuck I really have no fucking clue. 
+
+So an alternate solution would be to have the 'next' button clicked if 10 tabs were opened (I can successfully do this) and THEN run openAllUrls AGAIN if there are still more items left in the 'tabslimit'. This could be done by subtracting 10 from tabslimit every time or something. Or by using the existing count function (which I couldn't rely on and made no sense. I thought it was counting all of the links that get opened but somehow it thinks it's at 0 all the fucking time. I don't fucking get it.)  
+
+Sorry for the language, duck. 
+
+Maybe I should build the goddamn thing from scratch. Fucking hell, duck.
+
+Okay the easiest thing to try would be what I've been trying for 2 days which is to edit the openUrl function to run openAllUrls a-fucking-gain if the damn thing could work. 
+
+I haven't tried writing the function in that function(){openAllUrls();} fucking way or whatever that I'll have to look up. Shit.  
+
+Maybe I'll do that shit and it'll work. fucks sake. 
+
+What about the openAllUrls(); that I tried on it's own? Shouldn't that have worked?
+
+
+
+
