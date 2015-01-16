@@ -18,28 +18,43 @@
 			
 			function openSearchPages(tab) {
 				var tabslimit = localStorage["tabslimit"];
+				var next = $('.next a[rel~="next"]').attr("href");
+				if(tabslimit > 10) {
+					chrome.tabs.create({url: "https://www.linkedin.com/vsearch/f?keywords=&pt=people&page_num=2"});
 
-				if(tabslimit >= 10) {
-					chrome.tabs.sendRequest(tab.id, {
-							action : 'openNextPage'					
-				});
-				
+					chrome.tabs.onUpdated.addListener(function(tabId , info) {
+					    if (info.status == "complete") {
+					        openAllUrls(tab);
+					    }
+					});
+				openAllUrls(tab);
+		
 				}
-
 			}
 			//makes openAllUrls function that takes 'tab' argument
 			function openAllUrls(tab) {
 				// this sends a request for the listeners in contentScript based on tab.id
+				chrome.tabs.getAllInWindow(null, function(tabs){
+                    for (var i = 0; i < tabs.length; i++) {
+                        chrome.tabs.sendRequest(tabs[i].id, { 
+                        action: 'openLinkedInLinks',
+                        tabid : tabs[i].id
+                    }, function(response) {
+                        openUrl(response.urls, 0, 0, response.tabid);
+                    });                     
+                    }
+                });
+                }   
 							
-				chrome.tabs.sendRequest(tab.id, {
-					action : 'openLinkedInLinks',
-					tabid : tab.id
-					//function runs based on response
-				}, function(response) {
-					//runs openUrl with the urls from the response and the tabid from the response. 0s for index and count
-					openUrl(response.urls, 0, 0, response.tabid);
-				});
-			}
+			// 	chrome.tabs.sendRequest(tab.id, {
+			// 		action : 'openLinkedInLinks',
+			// 		tabid : tab.id
+			// 		//function runs based on response
+			// 	}, function(response) {
+			// 		//runs openUrl with the urls from the response and the tabid from the response. 0s for index and count
+			// 		openUrl(response.urls, 0, 0, response.tabid);
+			// 	});
+			// }
 			//pretty sure 'urls' gets populated by the 'data' variable in contentScript.js... not sure about 
 			// index or count. They're just zeroes to start I believe. tabid is just tab.id from response. 
 			function openUrl(urls, index, count, tabid) {
@@ -55,24 +70,25 @@
 				// 		action : 'openNextPage'
 				// 	})
 				// }
-				if(index == urls.length) {
-					var next = $('.next a[rel~="next"]').attr("href");
-					function OpenInNewTab(url) {
-						var win = window.open()
-					}
-					window.open(next);
-				}
+
+				//use a .json object
 
 				// if(index == urls.length) {
-				// // // 	// if(count == 0) {
+				// 	var next = $('.next a[rel~="next"]').prop("href");
+
+				// 	window.open(next, '_blank');
+				// }
+
+				// if(index == urls.length) {
+				// // // // 	// if(count == 0) {
 				// 		chrome.tabs.sendRequest(tabid, {
 				// 			action : 'openNextPage'
-				// // 		},	function(tab) {   
-				// // 			openAllUrls(tab);												
+				// 		},	function(tab) {   
+				// 			openAllUrls(tab);												
 				// });
 
-				// // // 	// }
-				// // // 	return;
+				// // // // 	// }
+				// // // // 	return;
 				// }
 
 				// declares variable url as urls with an index
@@ -145,7 +161,7 @@
 				}
 				//makes it so clicking the icon runs openAllUrls based on the open tab you're in
 				chrome.browserAction.onClicked.addListener(function(tab) {
-					openAllUrls(tab);
+					openSearchPages(tab);
 				});
 				//Fires when the extension or this script make requests from one another. 
 				//Registers an event listener callback to an event. not sure why its in this file tbh

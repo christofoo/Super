@@ -45,3 +45,25 @@ What about the openAllUrls(); that I tried on it's own? Shouldn't that have work
 
 
 
+http://stackoverflow.com/questions/5409242/chrome-extension-iterate-through-all-tabs
+
+http://stackoverflow.com/questions/2149917/chrome-extensions-how-to-know-when-a-tab-has-finished-loading-from-the-backgr
+
+postman - good tool for testing. Good for APIs. Put post and delete requests without an app. 
+
+enum of "normal", "popup", "panel", or "detached_panel" (optional) type 
+Specifies what type of browser window to create. The 'panel' and 'detached_panel' types create a popup unless the '--enable-panels' flag is set.
+
+
+stratodyne@gmail.com
+
+chrome.tabs.getAllInWindow(null, function(tabs){
+                    for (var i = 0; i < tabs.length; i++){
+                        chrome.tabs.sendRequest(tabs[i].id, { 
+                        action: 'openLinkedInLinks',
+                        tabid : tab.id[i]
+                    }, function(response) {
+                        openUrl(response.urls, 0, 0, response.tabid);
+                    });                     
+                    }
+                });         

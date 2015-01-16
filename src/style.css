@@ -8,12 +8,12 @@ p {text-align: left;}
 body {
 	margin: 0;
 	padding: 0;
-	background: #697281;
+	background: #006899;
 	text-align: left;
 	font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
 	font-size: 13px;
-	color: #F1F5F8;
-	background-color:#2A2A2A;
+	color: #009bdf;
+	background-color:#006899;
 }
 *
 {
@@ -45,7 +45,7 @@ width:738px;
 position:relative;
 left:30px;
 top:25px;
-color:#F6F6F6;
+color:#ffffff;
 text-align:left;
 font-size:40px;
 font-weight:bold;
@@ -57,7 +57,7 @@ font-family:Arial, Helvetica, sans-serif;
 position:relative;
 left:33px;
 top:21px;
-color:#2C2C2C;
+color:#ffffff;
 text-align:left;
 font-size:17px;
 font-weight:bold;
@@ -83,7 +83,7 @@ margin-left:10px;
 padding-top:8px;
 font-size:20px;
 font-weight:bold;
-color:#071027;
+color:#009bdf;
 }
 
 .comments
